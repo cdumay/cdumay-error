@@ -6,6 +6,7 @@
 
 
 """
+import sys
 import traceback
 from marshmallow import Schema, fields
 
@@ -16,14 +17,22 @@ class Error(Exception):
         self.message = message
         self.code = code
         self.msgid = msgid
-        self.stack = traceback.format_exc()
         self.extra = extra or dict()
+        self.stack = None
+
+        exc_t, exc_v, exc_tb = sys.exc_info()
+        if exc_t and exc_v and exc_tb:
+            self.stack = "\n".join([
+                x.rstrip() for x in traceback.format_exception(
+                    exc_t, exc_v, exc_tb
+                )
+            ])
 
     def __str__(self):
-        return "Error {}: {}".format(self.code, self.message)
+        return "{}: {}".format(self.code, self.message)
 
 
-class ErrorValidator(Schema):
+class ErrorSchema(Schema):
     code = fields.Integer(required=True)
     message = fields.String(required=True)
     msgid = fields.String()
