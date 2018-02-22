@@ -1,1 +1,1 @@
-jsonpickle==0.9.5
+marshmallow==2.14.0
