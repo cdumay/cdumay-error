@@ -1,6 +1,3 @@
-************
-cdumay-error
-************
 
 .. image:: https://img.shields.io/pypi/v/cdumay-error.svg
    :target: https://pypi.python.org/pypi/cdumay-error/
@@ -19,6 +16,10 @@ cdumay-error
   :target: http://cdumay-error.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
 
+************
+cdumay-error
+************
+
 cdumay-error is a basic library used to standardize exception objects and to
 serialize them into json using `marshmallow`.
 
@@ -28,7 +29,6 @@ Quickstart
 First, install cdumay-error using `pip <https://pip.pypa.io/en/stable/>`_::
 
     pip install -U cdumay-error
-
 
 Project Links
 =============
