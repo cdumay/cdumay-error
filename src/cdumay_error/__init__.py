@@ -12,11 +12,13 @@ from marshmallow import Schema, fields
 
 
 class Error(Exception):
-    def __init__(self, message, code=1, msgid=None, extra=None):
-        Exception.__init__(self, code, message)
-        self.message = message
+    """Error"""
+    msgid = "Err-00000"
+
+    def __init__(self, code=1, message=None, extra=None):
+        self.message = message if message else self.__doc__
+        Exception.__init__(self, code, self.message)
         self.code = code
-        self.msgid = msgid
         self.extra = extra or dict()
         self.stack = None
 
@@ -27,6 +29,13 @@ class Error(Exception):
                     exc_t, exc_v, exc_tb
                 )
             ])
+
+    def to_json(self):
+        return ErrorSchema().dumps(self)
+
+    @classmethod
+    def from_json(cls, data):
+        return ErrorSchema().load(data)
 
     def __repr__(self):
         return "%s<code=%s, message=%s>" % (
@@ -45,3 +54,35 @@ class ErrorSchema(Schema):
     msgid = fields.String()
     extra = fields.Dict()
     stack = fields.String()
+
+
+class ConfigurationError(Error):
+    """Configuration error"""
+    msgid = "ERR-19036"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=500, message=message, extra=extra)
+
+
+class IOError(Error):
+    """I/O Error"""
+    msgid = "ERR-27582"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=500, message=message, extra=extra)
+
+
+class NotImplemented(Error):
+    """Not Implemented"""
+    msgid = "ERR-04766"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=501, message=message, extra=extra)
+
+
+class ValidationError(Error):
+    """Validation error"""
+    msgid = "ERR-04413"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=400, message=message, extra=extra)
