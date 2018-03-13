@@ -86,3 +86,19 @@ class ValidationError(Error):
 
     def __init__(self, message=None, extra=None):
         Error.__init__(self, code=400, message=message, extra=extra)
+
+
+class NotFound(Error):
+    """Not Found"""
+    msgid = "ERR-08414"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=404, message=message, extra=extra)
+
+
+class InternalError(Error):
+    """Internal Error"""
+    msgid = "ERR-29885"
+
+    def __init__(self, message=None, extra=None):
+        Error.__init__(self, code=500, message=message, extra=extra)
