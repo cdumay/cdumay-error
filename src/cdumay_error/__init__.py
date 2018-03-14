@@ -64,6 +64,7 @@ class ConfigurationError(Error):
         Error.__init__(self, code=500, message=message, extra=extra)
 
 
+# noinspection PyShadowingBuiltins
 class IOError(Error):
     """I/O Error"""
     msgid = "ERR-27582"
@@ -72,6 +73,7 @@ class IOError(Error):
         Error.__init__(self, code=500, message=message, extra=extra)
 
 
+# noinspection PyShadowingBuiltins
 class NotImplemented(Error):
     """Not Implemented"""
     msgid = "ERR-04766"
