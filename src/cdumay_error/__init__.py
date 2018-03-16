@@ -39,20 +39,18 @@ class Error(Exception):
         return ErrorSchema().load(data)
 
     def __repr__(self):
-        return "%s<code=%s, message=%s>" % (
-            self.__class__.__name__,
-            self.msgid,
-            self.message
+        return "{}<code={}, msgid={}, message={}>".format(
+            self.__class__.__name__, self.code, self.msgid, self.message
         )
 
     def __str__(self):
-        return "{}.{}: {}".format(self.code, self.msgid, self.message)
+        return "{}: {}".format(self.msgid, self.message)
 
 
 class ErrorSchema(Schema):
     code = fields.Integer(required=True)
     message = fields.String(required=True)
-    MSGID = fields.String()
+    msgid = fields.String()
     extra = fields.Dict()
     stack = fields.String()
 
