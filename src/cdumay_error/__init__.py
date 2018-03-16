@@ -49,10 +49,14 @@ class Error(Exception):
 
 class ErrorSchema(Schema):
     code = fields.Integer(required=True)
+    name = fields.Method("class_name")
     message = fields.String(required=True)
     msgid = fields.String()
     extra = fields.Dict()
     stack = fields.String()
+
+    def class_name(self, data):
+        return data.__class__.__name__
 
 
 class ConfigurationError(Error):
