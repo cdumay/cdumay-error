@@ -13,14 +13,15 @@ from marshmallow import Schema, fields
 
 class Error(Exception):
     """Error"""
-    msgid = "Err-00000"
+    MSGID = "Err-00000"
 
-    def __init__(self, code=1, message=None, extra=None):
+    def __init__(self, code=1, message=None, extra=None, msgid=None):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
         self.code = code
         self.extra = extra or dict()
         self.stack = None
+        self.msgid = msgid or self.MSGID
 
         exc_t, exc_v, exc_tb = sys.exc_info()
         if exc_t and exc_v and exc_tb:
@@ -40,67 +41,79 @@ class Error(Exception):
     def __repr__(self):
         return "%s<code=%s, message=%s>" % (
             self.__class__.__name__,
-            self.code,
+            self.msgid,
             self.message
         )
 
     def __str__(self):
-        return "{}: {}".format(self.code, self.message)
+        return "{}.{}: {}".format(self.code, self.msgid, self.message)
 
 
 class ErrorSchema(Schema):
     code = fields.Integer(required=True)
     message = fields.String(required=True)
-    msgid = fields.String()
+    MSGID = fields.String()
     extra = fields.Dict()
     stack = fields.String()
 
 
 class ConfigurationError(Error):
     """Configuration error"""
-    msgid = "ERR-19036"
+    MSGID = "ERR-19036"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=500, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=500, message=message, extra=extra, msgid=msgid
+        )
 
 
 # noinspection PyShadowingBuiltins
 class IOError(Error):
     """I/O Error"""
-    msgid = "ERR-27582"
+    MSGID = "ERR-27582"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=500, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=500, message=message, extra=extra, msgid=msgid
+        )
 
 
 # noinspection PyShadowingBuiltins
 class NotImplemented(Error):
     """Not Implemented"""
-    msgid = "ERR-04766"
+    MSGID = "ERR-04766"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=501, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=501, message=message, extra=extra, msgid=msgid
+        )
 
 
 class ValidationError(Error):
     """Validation error"""
-    msgid = "ERR-04413"
+    MSGID = "ERR-04413"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=400, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=400, message=message, extra=extra, msgid=msgid
+        )
 
 
 class NotFound(Error):
     """Not Found"""
-    msgid = "ERR-08414"
+    MSGID = "ERR-08414"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=404, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=404, message=message, extra=extra, msgid=msgid
+        )
 
 
 class InternalError(Error):
     """Internal Error"""
-    msgid = "ERR-29885"
+    MSGID = "ERR-29885"
 
-    def __init__(self, message=None, extra=None):
-        Error.__init__(self, code=500, message=message, extra=extra)
+    def __init__(self, message=None, extra=None, msgid=None):
+        Error.__init__(
+            self, code=500, message=message, extra=extra, msgid=msgid
+        )
