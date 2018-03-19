@@ -15,21 +15,24 @@ class Error(Exception):
     """Error"""
     MSGID = "Err-00000"
 
-    def __init__(self, code=1, message=None, extra=None, msgid=None):
+    def __init__(self, code=1, message=None, extra=None, msgid=None,
+                 stack=None, name=None, **kwargs):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
         self.code = code
-        self.extra = extra or dict()
-        self.stack = None
+        self.extra = extra or kwargs
+        self.stack = stack
         self.msgid = msgid or self.MSGID
+        self.name = name or self.__class__.__name__
 
-        exc_t, exc_v, exc_tb = sys.exc_info()
-        if exc_t and exc_v and exc_tb:
-            self.stack = "\n".join([
-                x.rstrip() for x in traceback.format_exception(
-                    exc_t, exc_v, exc_tb
-                )
-            ])
+        if self.stack is None:
+            exc_t, exc_v, exc_tb = sys.exc_info()
+            if exc_t and exc_v and exc_tb:
+                self.stack = "\n".join([
+                    x.rstrip() for x in traceback.format_exception(
+                        exc_t, exc_v, exc_tb
+                    )
+                ])
 
     def to_json(self):
         return ErrorSchema().dumps(self)
@@ -49,7 +52,7 @@ class Error(Exception):
 
 class ErrorSchema(Schema):
     code = fields.Integer(required=True)
-    name = fields.Method("class_name")
+    name = fields.String(required=True)
     message = fields.String(required=True)
     msgid = fields.String()
     extra = fields.Dict()
