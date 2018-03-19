@@ -14,12 +14,13 @@ from marshmallow import Schema, fields
 class Error(Exception):
     """Error"""
     MSGID = "Err-00000"
+    CODE = 1
 
-    def __init__(self, code=1, message=None, extra=None, msgid=None,
+    def __init__(self, code=None, message=None, extra=None, msgid=None,
                  stack=None, name=None, **kwargs):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
-        self.code = code
+        self.code = code or self.CODE
         self.extra = extra or kwargs
         self.stack = stack
         self.msgid = msgid or self.MSGID
@@ -65,60 +66,36 @@ class ErrorSchema(Schema):
 class ConfigurationError(Error):
     """Configuration error"""
     MSGID = "ERR-19036"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=500, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 500
 
 
 # noinspection PyShadowingBuiltins
 class IOError(Error):
     """I/O Error"""
     MSGID = "ERR-27582"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=500, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 500
 
 
 # noinspection PyShadowingBuiltins
 class NotImplemented(Error):
     """Not Implemented"""
     MSGID = "ERR-04766"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=501, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 501
 
 
 class ValidationError(Error):
     """Validation error"""
     MSGID = "ERR-04413"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=400, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 400
 
 
 class NotFound(Error):
     """Not Found"""
     MSGID = "ERR-08414"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=404, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 404
 
 
 class InternalError(Error):
     """Internal Error"""
     MSGID = "ERR-29885"
-
-    def __init__(self, message=None, extra=None, msgid=None):
-        Error.__init__(
-            self, code=500, message=message, extra=extra, msgid=msgid
-        )
+    CODE = 500
