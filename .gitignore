@@ -2,3 +2,5 @@
 /.idea/
 /dist/
 /.eggs/
+docs/_build/
+__pycache__
