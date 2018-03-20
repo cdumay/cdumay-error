@@ -16,8 +16,8 @@ class Error(Exception):
     MSGID = "Err-00000"
     CODE = 1
 
-    def __init__(self, code=None, message=None, extra=None, msgid=None,
-                 stack=None, name=None, **kwargs):
+    def __init__(self, message=None, extra=None, msgid=None,
+                 stack=None, name=None, code=None, **kwargs):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
         self.code = code or self.CODE
