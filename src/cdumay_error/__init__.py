@@ -9,6 +9,7 @@
 import sys
 import traceback
 from marshmallow import Schema, fields
+from marshmallow import ValidationError as MarshmallowValidationError
 
 
 class Error(Exception):
@@ -61,6 +62,27 @@ class ErrorSchema(Schema):
 
     def class_name(self, data):
         return data.__class__.__name__
+
+
+def from_exc(exc, extra=None):
+    """ Try to convert exception into an JSOn serializable
+
+    :param Exception exc: exception
+    :param dict extra: extra data
+    :return: an Error
+    :rtype: Error
+    """
+    if isinstance(exc, Error):
+        return exc
+
+    if isinstance(exc, MarshmallowValidationError):
+        return ValidationError(
+            "Invalid field(s) value: {}".format(
+                ", ".join(exc.normalized_messages().keys())
+            ), extra=exc.normalized_messages()
+        )
+
+    return InternalError(message=str(exc), extra=extra)
 
 
 class ConfigurationError(Error):
