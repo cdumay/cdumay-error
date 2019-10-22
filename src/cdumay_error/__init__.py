@@ -39,6 +39,9 @@ class Error(Exception):
     def to_json(self):
         return ErrorSchema().dumps(self)
 
+    def to_dict(self):
+        return ErrorSchema().dump(self)
+
     @classmethod
     def from_json(cls, data):
         return ErrorSchema().load(data)
