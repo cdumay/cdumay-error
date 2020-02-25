@@ -58,9 +58,9 @@ class Error(Exception):
 
 
 class ErrorSchema(Schema):
-    code = fields.Integer(required=True)
-    name = fields.String(required=True)
-    message = fields.String(required=True)
+    code = fields.Integer()
+    name = fields.String()
+    message = fields.String()
     msgid = fields.String()
     extra = fields.Dict()
     stack = fields.String()
