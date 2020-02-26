@@ -10,7 +10,7 @@ import sys
 import traceback
 
 from cdumay_error.registry import Registry
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, EXCLUDE
 from marshmallow import ValidationError as MarshmallowValidationError
 
 
@@ -58,6 +58,9 @@ class Error(Exception):
 
 
 class ErrorSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     code = fields.Integer()
     name = fields.String()
     message = fields.String()
