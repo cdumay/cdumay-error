@@ -26,7 +26,7 @@ class Error(Exception):
                  msgid: Optional[str] = None,
                  stack: Optional[str] = None,
                  name: Optional[str] = None,
-                 code: Optional[str] = None,
+                 code: Optional[int] = None,
                  **kwargs):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
