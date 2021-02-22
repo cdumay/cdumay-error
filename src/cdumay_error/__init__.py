@@ -10,7 +10,6 @@ import sys
 import traceback
 from typing import Optional
 
-from cdumay_error.registry import Registry
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow import ValidationError as MarshmallowValidationError
 from marshmallow.fields import Mapping
@@ -99,54 +98,12 @@ def from_exc(exc: Exception, extra: Optional[dict] = None) -> Error:
         return exc
 
     if isinstance(exc, MarshmallowValidationError):
+        from cdumay_error.types import ValidationError
         return ValidationError(
             "Invalid field(s) value: {}".format(
                 ", ".join(exc.normalized_messages().keys())
             ), extra=exc.normalized_messages()
         )
 
+    from cdumay_error.types import InternalError
     return InternalError(message=str(exc), extra=extra)
-
-
-@Registry.register
-class ConfigurationError(Error):
-    """Configuration error"""
-    MSGID = "ERR-19036"
-    CODE = 500
-
-
-# noinspection PyShadowingBuiltins
-@Registry.register
-class IOError(Error):
-    """I/O Error"""
-    MSGID = "ERR-27582"
-    CODE = 500
-
-
-# noinspection PyShadowingBuiltins
-@Registry.register
-class NotImplemented(Error):
-    """Not Implemented"""
-    MSGID = "ERR-04766"
-    CODE = 501
-
-
-@Registry.register
-class ValidationError(Error):
-    """Validation error"""
-    MSGID = "ERR-04413"
-    CODE = 400
-
-
-@Registry.register
-class NotFound(Error):
-    """Not Found"""
-    MSGID = "ERR-08414"
-    CODE = 404
-
-
-@Registry.register
-class InternalError(Error):
-    """Internal Error"""
-    MSGID = "ERR-29885"
-    CODE = 500
