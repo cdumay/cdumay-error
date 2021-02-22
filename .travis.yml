@@ -1,8 +1,8 @@
 language: python
 python:
-- 3.5
+- 3.8
 script:
-- python setup.py test
+- python setup.py build
 deploy:
   provider: pypi
   user: cdumay

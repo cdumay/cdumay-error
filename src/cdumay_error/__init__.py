@@ -8,19 +8,27 @@
 """
 import sys
 import traceback
+from typing import Optional
 
 from cdumay_error.registry import Registry
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow import ValidationError as MarshmallowValidationError
+from marshmallow.fields import Mapping
 
 
 class Error(Exception):
-    """Error"""
+    """Mother class for all errors"""
     MSGID = "Err-00000"
     CODE = 1
 
-    def __init__(self, message=None, extra=None, msgid=None,
-                 stack=None, name=None, code=None, **kwargs):
+    def __init__(self,
+                 message: Optional[str] = None,
+                 extra: Optional[dict] = None,
+                 msgid: Optional[str] = None,
+                 stack: Optional[str] = None,
+                 name: Optional[str] = None,
+                 code: Optional[str] = None,
+                 **kwargs):
         self.message = message if message else self.__doc__
         Exception.__init__(self, code, self.message)
         self.code = code or self.CODE
@@ -38,27 +46,32 @@ class Error(Exception):
                     )
                 ])
 
-    def to_json(self):
+    def to_json(self) -> str:
+        """Serialize to JSON"""
         return ErrorSchema().dumps(self)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """Serialize as Dict"""
         return ErrorSchema().dump(self)
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: Mapping) -> "Error":
+        """Deserialize from JSON"""
         return ErrorSchema().load(data)
 
-    def __repr__(self):
-        return "{}<code={}, msgid={}, message={}>".format(
-            self.__class__.__name__, self.code, self.msgid, self.message
-        )
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}<code={self.code}," \
+               f" msgid={self.msgid}, message={self.message}>"
 
-    def __str__(self):
-        return "{}: {}".format(self.msgid, self.message)
+    def __str__(self) -> str:
+        return f"{self.msgid}: {self.message}"
 
 
 class ErrorSchema(Schema):
+    """Error Serializer"""
+
     class Meta:
+        """Marshamllow field management"""
         unknown = EXCLUDE
 
     code = fields.Integer()
@@ -66,13 +79,15 @@ class ErrorSchema(Schema):
     message = fields.String()
     msgid = fields.String()
     extra = fields.Dict()
-    stack = fields.String()
+    stack = fields.String(allow_none=True)
 
-    def class_name(self, data):
+    @staticmethod
+    def class_name(data: Error) -> str:
+        """Return error name"""
         return data.__class__.__name__
 
 
-def from_exc(exc, extra=None):
+def from_exc(exc: Exception, extra: Optional[dict] = None) -> Error:
     """ Try to convert exception into an JSOn serializable
 
     :param Exception exc: exception

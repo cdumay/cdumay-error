@@ -4,4 +4,5 @@
 /.eggs/
 docs/_build/
 __pycache__
+.changelog.json
 .jira-release.yml
