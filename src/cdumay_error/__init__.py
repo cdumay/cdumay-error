@@ -19,6 +19,7 @@ class Error(Exception):
     """Mother class for all errors"""
     MSGID = "Err-00000"
     CODE = 1
+    MESSAGE = None
 
     def __init__(self,
                  message: Optional[str] = None,
@@ -28,7 +29,7 @@ class Error(Exception):
                  name: Optional[str] = None,
                  code: Optional[int] = None,
                  **kwargs):
-        self.message = message if message else self.__doc__
+        self.message = message or self.MESSAGE or self.__doc__
         Exception.__init__(self, code, self.message)
         self.code = code or self.CODE
         self.extra = extra or kwargs
