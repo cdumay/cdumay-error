@@ -8,9 +8,8 @@
 """
 import sys
 import traceback
-from typing import Optional, Union
+from typing import Optional, Any
 
-from cdumay_error.types import ValidationError, InternalError
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow import ValidationError as MarshmallowValidationError
 from marshmallow.fields import Mapping
@@ -106,23 +105,24 @@ class ErrorSchema(Schema):
         return data.__class__.__name__
 
 
-def from_exc(exc: Exception, extra: Optional[dict] = None) -> \
-        Union[Error, ValidationError, InternalError]:
+def from_exc(exc: Exception, extra: Optional[dict] = None) -> Any:
     """ Try to convert exception into an JSOn serializable
 
     :param Exception exc: exception
     :param Optional[dict] extra: extra data
     :return: an Error
-    :rtype: Union[Error, ValidationError, InternalError]
+    :rtype: Any Error
     """
     if isinstance(exc, Error):
         return exc
 
     if isinstance(exc, MarshmallowValidationError):
+        from cdumay_error.types import ValidationError
         return ValidationError(
             "Invalid field(s) value: {}".format(
                 ", ".join(exc.normalized_messages().keys())
             ), extra=exc.normalized_messages()
         )
 
+    from cdumay_error.types import InternalError
     return InternalError(message=str(exc), extra=extra)
