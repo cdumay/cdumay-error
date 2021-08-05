@@ -8,8 +8,9 @@
 """
 import sys
 import traceback
-from typing import Optional
+from typing import Optional, Union
 
+from cdumay_error.types import ValidationError, InternalError
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow import ValidationError as MarshmallowValidationError
 from marshmallow.fields import Mapping
@@ -47,16 +48,29 @@ class Error(Exception):
                 ])
 
     def to_json(self) -> str:
-        """Serialize to JSON"""
+        """Serialize to JSON
+
+        :return: Error into JSON representation
+        :rtype: str
+        """
         return ErrorSchema().dumps(self)
 
     def to_dict(self) -> dict:
-        """Serialize as Dict"""
+        """Serialize as Dict
+
+        :return: Error dumped into a dict
+        :rtype: dict
+        """
         return ErrorSchema().dump(self)
 
     @classmethod
     def from_json(cls, data: Mapping) -> "Error":
-        """Deserialize from JSON"""
+        """Deserialize from JSON
+
+        :param Mapping data: JSON representation
+        :return: The error
+        :rtype: Error
+        """
         return ErrorSchema().load(data)
 
     def __repr__(self) -> str:
@@ -83,28 +97,32 @@ class ErrorSchema(Schema):
 
     @staticmethod
     def class_name(data: Error) -> str:
-        """Return error name"""
+        """Return error name
+
+        :param Error data: Error to name
+        :return: Error name
+        :rtype: str
+        """
         return data.__class__.__name__
 
 
-def from_exc(exc: Exception, extra: Optional[dict] = None) -> Error:
+def from_exc(exc: Exception, extra: Optional[dict] = None) -> \
+        Union[Error, ValidationError, InternalError]:
     """ Try to convert exception into an JSOn serializable
 
     :param Exception exc: exception
-    :param dict extra: extra data
+    :param Optional[dict] extra: extra data
     :return: an Error
-    :rtype: Error
+    :rtype: Union[Error, ValidationError, InternalError]
     """
     if isinstance(exc, Error):
         return exc
 
     if isinstance(exc, MarshmallowValidationError):
-        from cdumay_error.types import ValidationError
         return ValidationError(
             "Invalid field(s) value: {}".format(
                 ", ".join(exc.normalized_messages().keys())
             ), extra=exc.normalized_messages()
         )
 
-    from cdumay_error.types import InternalError
     return InternalError(message=str(exc), extra=extra)
