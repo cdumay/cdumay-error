@@ -7,14 +7,24 @@
    :target: https://travis-ci.org/cdumay/cdumay-error
    :alt: Latest version
 
-
 .. image:: https://readthedocs.org/projects/cdumay-error/badge/?version=latest
    :target: http://cdumay-error.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://readthedocs.org/projects/cdumay-error/badge/?version=latest
-  :target: http://cdumay-error.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation Status
+.. image:: https://img.shields.io/badge/license-BSD3-blue.svg
+    :target: https://github.com/cdumay/cdumay-error/blob/master/LICENSE
+
+.. image:: https://github.com/cdumay/cdumay-error/blob/reports/junit/tests-badge.svg?raw=true
+   :target: https://htmlpreview.github.io/?https://github.com/cdumay/cdumay-error/blob/reports/junit/report.html
+   :alt: Tests
+
+.. image:: https://github.com/cdumay/cdumay-error/blob/reports/flake8/flake8-badge.svg?raw=true
+   :target: https://htmlpreview.github.io/?https://github.com/cdumay/cdumay-error/blob/reports/flake8/index.html
+   :alt: Lint
+
+.. image:: https://github.com/cdumay/cdumay-error/blob/reports/coverage/coverage-badge.svg?raw=true
+   :target: https://htmlpreview.github.io/?https://github.com/cdumay/cdumay-error/blob/reports/coverage/html/index.html
+   :alt: Coverage badge
 
 ************
 cdumay-error
@@ -40,4 +50,4 @@ Project Links
 License
 =======
 
-MIT License
+Licensed under `BSD 3-Clause License <./LICENSE>`_ or https://opensource.org/licenses/BSD-3-Clause.
