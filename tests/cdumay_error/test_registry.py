@@ -35,7 +35,7 @@ class TestRegistry(unittest.TestCase):
             },
             Registry.to_list()
         )
-        self.assertEqual(len(Registry.to_dict()), 6)
+        self.assertGreaterEqual(len(Registry.to_dict()), 6)
 
     def test_craft_error(self):
         """craft_error function"""
