@@ -13,7 +13,7 @@ from cdumay_error.registry import Registry
 class ConfigurationError(Error):
     """Configuration error"""
     MSGID = "ERR-19036"
-    CODE = 500
+    CODE = 400
 
 
 # noinspection PyShadowingBuiltins

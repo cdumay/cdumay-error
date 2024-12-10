@@ -24,24 +24,28 @@ class TestRegistry(unittest.TestCase):
         self.assertEqual(
             Registry.error_to_dict(types.NotFound),
             {
-                'code': 404, 'description': 'Not Found', 'msgid': 'ERR-08414',
-                'name': 'NotFound'
-            }
+                "code": 404,
+                "description": "Not Found",
+                "msgid": "ERR-08414",
+                "name": "NotFound",
+            },
         )
         self.assertIn(
             {
-                'code': 500, 'description': 'Configuration error',
-                'msgid': 'ERR-19036', 'name': 'ConfigurationError'
+                "code": 400,
+                "description": "Configuration error",
+                "msgid": "ERR-19036",
+                "name": "ConfigurationError",
             },
-            Registry.to_list()
+            Registry.to_list(),
         )
         self.assertGreaterEqual(len(Registry.to_dict()), 6)
 
     def test_craft_error(self):
         """craft_error function"""
         my_error = Registry.craft_error(
-            'ERR-19036', message="Configuration failed"
+            "ERR-19036", message="Configuration failed"
         )
-        self.assertIs(my_error.name, 'ConfigurationError')
-        my_error = Registry.craft_error('ERR-*****', message="Unknown error")
+        self.assertIs(my_error.name, "ConfigurationError")
+        my_error = Registry.craft_error("ERR-*****", message="Unknown error")
         self.assertIs(my_error.code, 1)
